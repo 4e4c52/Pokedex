@@ -50,6 +50,8 @@ group :development do
   # gem "spring"
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec'
+  gem 'vcr'
+  gem 'webmock'
 end
 
 # Wrapper for Poke API V2
