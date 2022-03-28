@@ -5,4 +5,9 @@ namespace :import do
   task types: :environment do
     Importers::Types.import
   end
+
+  desc 'Import Pokemons into the database'
+  task pokemons: :environment do
+    Importers::Pokemons.import
+  end
 end
