@@ -1,0 +1,88 @@
+---
+openapi: 3.0.1
+info:
+  title: Pokedex API V1
+  version: v1
+paths:
+  "/pokemons":
+    get:
+      summary: List the Pokemons
+      tags:
+      - Pokemons
+      parameters:
+      - name: page
+        in: query
+        description: Page number
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful
+          headers:
+            Current-Page:
+              type: integer
+              description: The current page number
+            Page-Items:
+              type: integer
+              description: The number of items in the current page
+            Total-Pages:
+              type: integer
+              description: The total number of pages
+            Total-Count:
+              type: integer
+              description: The total number of Pokemons
+          content:
+            application/json:
+              example:
+              - id: 1
+                name: bulbasaur
+                types:
+                - id: 4
+                  name: poison
+                - id: 12
+                  name: grass
+              - id: 2
+                name: ivysaur
+                types:
+                - id: 4
+                  name: poison
+                - id: 12
+                  name: grass
+  "/pokemons/{id}":
+    get:
+      summary: Show a Pokemon
+      tags:
+      - Pokemons
+      parameters:
+      - name: id
+        in: path
+        description: The Pokemon ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              example:
+                id: 1
+                name: bulbasaur
+                types:
+                - id: 4
+                  name: poison
+                - id: 12
+                  name: grass
+        '404':
+          description: Pokemon not found
+          content:
+            application/json:
+              example:
+                status: 404
+                error: Couldn't find Pokemon with 'id'=4
+servers:
+- url: https://pokedex-4e4c52.herokuapp.com
+  description: Production server
+- url: http://localhost:3000
+  description: Local development server

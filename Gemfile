@@ -8,8 +8,8 @@ ruby '3.1.0'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.0.2', '>= 7.0.2.3'
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3', '~> 1.4'
+# Use postgresql as the database for Active Record
+gem 'pg', '~> 1.1'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 5.0'
@@ -43,6 +43,10 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'rswag-specs'
+
+  # Use sqlite3 as the database for Active Record
+  gem 'sqlite3', '~> 1.4'
 end
 
 group :development do
@@ -54,8 +58,16 @@ group :development do
   gem 'webmock'
 end
 
+group :test do
+  gem 'database_cleaner-active_record'
+end
+
 # Wrapper for Poke API V2
 gem 'poke-api-v2', '~> 0.1.1'
 
 # Pagination
 gem 'pagy', '~> 5.10'
+
+# API Documentation & Specs
+gem 'rswag-api'
+gem 'rswag-ui'
