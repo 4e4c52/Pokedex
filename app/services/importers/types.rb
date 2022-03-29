@@ -20,6 +20,9 @@ module Importers
 
       # Process next types if any
       retrieve_types(imported:) if imported < response.count
+    rescue JSON::ParserError => e
+      # The underlying gem doesn't handle errors and just throw JSON parsing errors
+      Rails.logger.debug "Type retrieval failed with error #{e}"
     end
 
     def self.process_results(results: [])

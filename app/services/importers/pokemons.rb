@@ -2,7 +2,7 @@
 
 require 'poke-api-v2'
 
-# Import the Pokemon types into the database
+# Import the Pokemon into the database
 module Importers
   class Pokemons
     LIMIT = 100
@@ -18,8 +18,11 @@ module Importers
 
       imported += LIMIT
 
-      # Process next types if any
+      # Process next pokemons if any
       retrieve_pokemons(imported:) if imported < response.count
+    rescue JSON::ParserError => e
+      # The underlying gem doesn't handle errors and just throw JSON parsing errors
+      Rails.logger.debug "Pokemon retrieval failed with error #{e}"
     end
 
     def self.process_results(results: [])
@@ -28,7 +31,7 @@ module Importers
         # In order to get the extra details
         raw_pokemon = PokeApi.get(pokemon: result.name)
 
-        pokemon = Pokemon.create_or_find_by(id: raw_pokemon.id) do |p|
+        Pokemon.create_or_find_by(id: raw_pokemon.id) do |p|
           p.name = raw_pokemon.name
           p.height = raw_pokemon.height
           p.weight = raw_pokemon.weight
@@ -36,9 +39,11 @@ module Importers
           p.type_ids = retrieve_type_ids(raw_types: raw_pokemon.types)
         end
       end
+    rescue JSON::ParserError => e
+      Rails.logger.debug "Pokemon retrieval failed with error #{e}"
     end
 
-    def self.retrieve_type_ids(raw_types:)
+    def self.retrieve_type_ids(raw_types: [])
       raw_types.map do |raw_type|
         # Use the same shortcut to get the type id
         # As the import is already slow

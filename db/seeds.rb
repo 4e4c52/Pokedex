@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-p 'Importing Types...'
+Rails.logger.debug 'Importing Types...'
 Importers::Types.import
 
-p 'Importing Pokemons (this might take a while)...'
+Rails.logger.debug 'Importing Pokemons (this might take a while)...'
 Importers::Pokemons.import
